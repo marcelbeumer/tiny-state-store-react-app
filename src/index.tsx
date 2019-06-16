@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import ReactDOM from 'react-dom';
+import createStore from './store';
+import createActions from './actions';
+import { AppContextData } from './types';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+let render = () => {};
+const store = createStore(() => render());
+const actions = createActions(store);
+const getAppContext = () => ({ state: store.getState(), actions });
+export const AppContext = createContext<AppContextData>(getAppContext());
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const rootElement = document.getElementById('root');
+render = () => {
+  ReactDOM.render(
+    <AppContext.Provider value={getAppContext()}>
+      <App />
+    </AppContext.Provider>,
+    rootElement
+  );
+};
+
+render();
