@@ -7,9 +7,4 @@ export interface AppState {
   text: string;
 }
 
-export interface AppContextData {
-  state: AppState;
-  actions: Actions;
-}
-
 export interface AppStateStore extends Store<AppState> {}
